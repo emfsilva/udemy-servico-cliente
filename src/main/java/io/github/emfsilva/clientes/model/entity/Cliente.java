@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -23,12 +24,12 @@ public class Cliente {
     @Column(nullable = false, length = 11)
     private String cpf;
 
-    @Column(name = "data_cadastro")
-    @JsonFormat(pattern = "dd/MM/yyy")
-    private LocalDate dataCadastro;
+    @Column(name = "data_cadastro", updatable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime dataCadastro;
 
     @PrePersist
     public void prePersist(){
-        setDataCadastro(LocalDate.now());
+        setDataCadastro(LocalDateTime.now());
     }
 }

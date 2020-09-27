@@ -17,24 +17,33 @@ public class ClienteController {
     private final ClienteRepository clienteRepository;
 
     @Autowired
-    public ClienteController(ClienteRepository clienteRepository){
+    public ClienteController(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
     @GetMapping
-    public List<Cliente> buscarClientes(){
+    public List<Cliente> buscarClientes() {
         return clienteRepository.findAll();
     }
 
     @GetMapping("{id}")
-    public Cliente buscarPorId(@PathVariable Integer id){
-        return clienteRepository.findById(id).orElseThrow((
-        ) -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public Cliente buscarPorId(@PathVariable Integer id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente salvar(@RequestBody Cliente cliente){
+    public Cliente salvar(@RequestBody Cliente cliente) {
         return clienteRepository.save(cliente);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarCliente(@PathVariable Integer id) {
+        clienteRepository.findById(id).map(cliente -> {
+            clienteRepository.delete(cliente);
+            return Void.TYPE;
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

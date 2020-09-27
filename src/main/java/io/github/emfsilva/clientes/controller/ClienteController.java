@@ -6,6 +6,7 @@ import io.github.emfsilva.clientes.model.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,6 +24,12 @@ public class ClienteController {
     @GetMapping
     public List<Cliente> buscarClientes(){
         return clienteRepository.findAll();
+    }
+
+    @GetMapping("{id}")
+    public Cliente buscarPorId(@PathVariable Integer id){
+        return clienteRepository.findById(id).orElseThrow((
+        ) -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
